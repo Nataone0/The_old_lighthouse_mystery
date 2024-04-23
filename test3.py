@@ -1,6 +1,7 @@
 import pygame
 import sys
 from pygame.locals import *
+import os
 
 SCREEN_WIDTH = 1024  # размеры окна выбрал такими, потому что картинки 1024 х 512,
 SCREEN_HEIGHT = 600  # можно обрезать картинки (или заново сгенерить) если нужен другой размер
@@ -18,26 +19,36 @@ class Location:    # класс локации, все атрибуты можн
         self.dialog = []
         self.next_locations = []
         self.options = options if options else []
+        self.character_images = {}  # словарь для хранения изображений персонажей
+        self.voice_clips = {}  # словарь для хранения звуковых файлов диалогов
 
+    def load_character_image(self, character_name, image_path):
+        image = pygame.image.load(image_path)
+        self.character_images[character_name] = pygame.transform.scale(image, (200, 300))
 
-    def start_music(self):                            # запускает звуковой файл
-        pygame.mixer.music.load(self.music_path)
-        pygame.mixer.music.play(-1)                   # бесконечное воспроизведение звука
+    def load_voice_clip(self, dialog_id, clip_path):
+        self.voice_clips[dialog_id] = pygame.mixer.Sound(clip_path)
 
-    def draw_text(self, text, position, font_size=24, color=(250, 250, 200)):  # отрисовка текста
-        font = pygame.font.Font(None, font_size)
-        text_surface = font.render(text, True, color)
-        self.screen.blit(text_surface, position)
+    def play_voice_clip(self, dialog_id):
+        if dialog_id in self.voice_clips:
+            # Приглушение фоновой музыки во время диалога
+            pygame.mixer.music.set_volume(0.2)
+            self.voice_clips[dialog_id].play()
+            # Ожидание окончания воспроизведения звукового файла
+            while pygame.mixer.get_busy():
+                pygame.time.delay(100)
+            # Восстановление громкости фоновой музыки
+            pygame.mixer.music.set_volume(1.0)
 
     def run_dialog(self):  # функция диалогов
         index = 0
         while index < len(self.dialog):        # цикл перебора всех фраз диалога от 0-го до последнего индекса
             for event in pygame.event.get():
-                if event.type == QUIT:         # выход из игры
-                    pygame.quit()
+                if event.type == QUIT:
+                    pygame.quit()         # выход из игры
                     sys.exit()
-                elif event.type == KEYDOWN:  
-                    if event.key == K_SPACE:        # листаем фразы диалога клавишей Пробела
+                elif event.type == KEYDOWN:
+                    if event.key == K_SPACE: # листаем фразы диалога клавишей Пробела
                         if index < len(self.dialog) - 1:
                             index += 1
                         else:
@@ -47,9 +58,23 @@ class Location:    # класс локации, все атрибуты можн
                         sys.exit()
             self.screen.blit(self.background, (0, 0))
             speaker, text = self.dialog[index]
+            if speaker in self.character_images:
+                character_image = self.character_images[speaker]
+                self.screen.blit(character_image, (50, 250))  # Позиция изображения персонажа
             self.draw_text(f"{speaker}: {text}", (100, 550))
+            self.play_voice_clip(index)  # Воспроизведение звукового файла для текущей реплики по индексу
             pygame.display.update()
             self.clock.tick(60)
+
+    def start_music(self):                            # запускает звуковой файл
+        pygame.mixer.music.load(self.music_path)
+        pygame.mixer.music.play(-1,0.0)                   # бесконечное воспроизведение звука
+
+    def draw_text(self, text, position, font_size=24, color=(250, 250, 200)):  # отрисовка текста
+        font = pygame.font.Font(None, font_size)
+        text_surface = font.render(text, True, color)
+        self.screen.blit(text_surface, position)
+
     def choose_action(self):  # выбор перехода к следующей локации
         opt = None            # opt - переменная сделанного выбора
         while opt is None:
@@ -135,5 +160,20 @@ if __name__ == '__main__':
                      ("Персонаж 2", "Текст к локации."),
                      ("Персонаж 1", "Текст к локации."),
                      ("Персонаж 2", "Текст к локации.")]
+
+    loc1_1.load_voice_clip = {(0, 'Location1_dialogs/01 - (Кирилл) Здравствуйте я Кирил.mp3'),
+                              (1, 'Location1_dialogs/02 - (Бармен) Приветствую, Кирилл.mp3'),
+                              (2, 'Location1_dialogs/03 - (Кирилл) Кофе пожалуйста Я слышал что вы можете рассказать.mp3'),
+                              (3, 'Location1_dialogs/04 - (бармен) Да, маяк, Он уже много лет .mp3'),
+                              (4, 'Location1_dialogs/05 - (Кирилл) Я весь во внимании Расскажите.mp3'),
+                              (5, 'Location1_dialogs/06 - (бармен) Странности начались .mp3'),
+                              (6, 'Location1_dialogs/07 - (бармен) А недавно кто-то видел странные огни там.mp3'),
+                              (7, 'Location1_dialogs/10 - (бармен) Недавно тут был детектив.mp3'),
+                              (8, 'Location1_dialogs/11 - (Кирилл) Записка? Можно мне её посмотреть.mp3'),
+                              (9, 'Location1_dialogs/12 - (бармен) Конечно Держите Надеюсь она поможет.mp3'),
+                              }
+    loc1_1.play_voice_clip(0)
+
+
 
     loc1_1.run()   # запуск первой локации, первой сцены
