@@ -1,9 +1,10 @@
 import pygame
 import sys
 from pygame.locals import *
+import os
 
 SCREEN_WIDTH = 1024  # размеры окна выбрал такими, потому что картинки 1024 х 512,
-SCREEN_HEIGHT = 600  # можно обрезать картинки (или заново сгенерить) если нужен другой размер
+SCREEN_HEIGHT = 512  # можно обрезать картинки (или заново сгенерить) если нужен другой размер
 
 class Location:    # класс локации, все атрибуты можно хранить и загружать из SQLite
     def __init__(self, background_image_path, music_path, options=None):
@@ -18,38 +19,71 @@ class Location:    # класс локации, все атрибуты можн
         self.dialog = []
         self.next_locations = []
         self.options = options if options else []
+        self.character_images = {}  # словарь для хранения изображений персонажей
+        self.voice_clips = {}  # словарь для хранения звуковых файлов диалогов
+
+    def load_character_image(self, character_name, image_path):
+        image = pygame.image.load(image_path)
+        self.character_images[character_name] = pygame.transform.scale(image, (1024, 512))
+
+    def load_voice_clip(self, dialog_id, clip_path):
+        self.voice_clips[dialog_id] = pygame.mixer.Sound(clip_path)
+
+    def play_voice_clip(self, dialog_id):
+        if dialog_id in self.voice_clips:
+            # Приглушение фоновой музыки во время диалога
+            pygame.mixer.music.set_volume(0.2)
+            self.voice_clips[dialog_id].play()
+            # Ожидание окончания воспроизведения звукового файла
+            while pygame.mixer.get_busy():
+                pygame.time.delay(100)
+
+            # Восстановление громкости фоновой музыки
+            pygame.mixer.music.set_volume(1.0)
+
+    def run_dialog(self):  # функция диалогов
+        index = 0
+        last_index = -1  # переменная для отслеживания последнего воспроизведённого индекса
+        running = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()  # выход из игры
+                    sys.exit()
+                elif event.type == KEYDOWN:
+                    if event.key == K_SPACE:  # листаем фразы диалога клавишей Пробела
+                        if index < len(self.dialog) - 1:
+                            index += 1
+                        else:
+                            running = False  # выход из диалога
+                    elif event.key == K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
+
+            self.screen.blit(self.background, (0, 0))
+            speaker, text = self.dialog[index]
+            if speaker in self.character_images:
+                character_image = self.character_images[speaker]
+                self.screen.blit(character_image, (0, 0))  # Позиция изображения персонажа
+            self.draw_text(f"{speaker}: {text}", (100, 450))  # Рисуем текст поверх изображения персонажа
+            pygame.display.update()
+
+            if last_index != index:  # проверяем, изменился ли индекс
+                last_index = index  # обновляем последний индекс
+                self.play_voice_clip(index)  # воспроизведение звукового файла для текущей реплики по индексу
+
+            self.clock.tick(60)
 
 
     def start_music(self):                            # запускает звуковой файл
         pygame.mixer.music.load(self.music_path)
-        pygame.mixer.music.play(-1)                   # бесконечное воспроизведение звука
+        pygame.mixer.music.play(-1,0.0)                   # бесконечное воспроизведение звука
 
-    def draw_text(self, text, position, font_size=24, color=(250, 250, 200)):  # отрисовка текста
-        font = pygame.font.Font(None, font_size)
-        text_surface = font.render(text, True, color)
+    def draw_text(self, text, position, font_size=24):  # Значение по умолчанию для размера шрифта
+        font = pygame.font.Font(None, font_size)  # Создаем шрифт заданного размера
+        text_surface = font.render(text, True, (255, 255, 255))  # Белый цвет текста
         self.screen.blit(text_surface, position)
 
-    def run_dialog(self):  # функция диалогов
-        index = 0
-        while index < len(self.dialog):        # цикл перебора всех фраз диалога от 0-го до последнего индекса
-            for event in pygame.event.get():
-                if event.type == QUIT:         # выход из игры
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == KEYDOWN:  
-                    if event.key == K_SPACE:        # листаем фразы диалога клавишей Пробела
-                        if index < len(self.dialog) - 1:
-                            index += 1
-                        else:
-                            return  # выход из диалога
-                    elif event.key == K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
-            self.screen.blit(self.background, (0, 0))
-            speaker, text = self.dialog[index]
-            self.draw_text(f"{speaker}: {text}", (100, 550))
-            pygame.display.update()
-            self.clock.tick(60)
     def choose_action(self):  # выбор перехода к следующей локации
         opt = None            # opt - переменная сделанного выбора
         while opt is None:
@@ -136,4 +170,20 @@ if __name__ == '__main__':
                      ("Персонаж 1", "Текст к локации."),
                      ("Персонаж 2", "Текст к локации.")]
 
-    loc1_1.run()   # запуск первой локации, первой сцены
+    loc1_1.load_voice_clip(0, 'Location1_dialogs/loc1_1_01.mp3')
+    loc1_1.load_voice_clip(1, 'Location1_dialogs/loc1_1_02.mp3')
+    loc1_1.load_voice_clip(2, 'Location1_dialogs/loc1_1_03.mp3')
+    loc1_1.load_voice_clip(3, 'Location1_dialogs/loc1_1_04.mp3')
+    loc1_1.load_voice_clip(4, 'Location1_dialogs/loc1_1_05.mp3')
+    loc1_1.load_voice_clip(5, 'Location1_dialogs/loc1_1_06.mp3')
+    loc1_1.load_voice_clip(6, 'Location1_dialogs/loc1_1_07.mp3')
+    loc1_1.load_voice_clip(7, 'Location1_dialogs/loc1_1_08.mp3')
+    loc1_1.load_voice_clip(8, 'Location1_dialogs/loc1_1_09.mp3')
+    loc1_1.load_voice_clip(9, 'Location1_dialogs/loc1_1_10.mp3')
+
+    loc1_1.character_images['Кирилл'] = pygame.image.load('Location1_dialogs/Kirill.jpeg')
+    loc1_1.character_images['Бармен'] = pygame.image.load('Location1_dialogs/Barmen.jpeg')
+
+
+
+    loc1_1.run()  # запуск первой локации, первой сцены
