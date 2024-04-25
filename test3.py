@@ -79,10 +79,32 @@ class Location:    # класс локации, все атрибуты можн
         pygame.mixer.music.load(self.music_path)
         pygame.mixer.music.play(-1,0.0)                   # бесконечное воспроизведение звука
 
-    def draw_text(self, text, position, font_size=24):  # Значение по умолчанию для размера шрифта
+    def draw_text(self, text, position, font_size=24, max_width=850):
         font = pygame.font.Font(None, font_size)  # Создаем шрифт заданного размера
-        text_surface = font.render(text, True, (255, 255, 255))  # Белый цвет текста
-        self.screen.blit(text_surface, position)
+        words = text.split(' ')  # Разбиваем текст на слова
+        x, y = position
+        space = font.size(' ')[0]  # Ширина пробела
+        current_line = []
+        current_width = 0
+
+        for word in words:
+            word_surface = font.render(word, True, (255, 255, 255))
+            word_width, word_height = word_surface.get_size()
+            if max_width is not None and current_width + word_width >= max_width:
+                # Если добавление слова превышает максимальную ширину, выводим текущую строку
+                line_surface = font.render(' '.join(current_line), True, (255, 255, 255))
+                self.screen.blit(line_surface, (x, y))
+                y += word_height  # Перемещаемся на следующую строку
+                current_line = [word]  # Начинаем новую строку с текущего слова
+                current_width = word_width + space
+            else:
+                # Добавляем слово в текущую строку
+                current_line.append(word)
+                current_width += word_width + space
+
+        # Вывод последней строки
+        line_surface = font.render(' '.join(current_line), True, (255, 255, 255))
+        self.screen.blit(line_surface, (x, y))
 
     def choose_action(self):  # выбор перехода к следующей локации
         opt = None            # opt - переменная сделанного выбора
@@ -117,6 +139,8 @@ class Location:    # класс локации, все атрибуты можн
             pygame.quit()
 
 if __name__ == '__main__':
+    loc01 = Location('Location01_Prolog/loc01_Pab.jpg', 'Location01_Prolog/plesk-voln.mp3', ["Посетить местный паб", "Вариант 2"])
+
     loc1_1 = Location('loc1_1.jpg', 'loc1_1.mp3', ["Изучить записку", "Расспросить посетителей бара"]) # создание локаций: loc1 - первая локация, _1 - первая сцена
     loc1_2 = Location('loc1_2.jpg', 'loc1_2.mp3', ["Дом сторожа маяка", "Вариант 2"])                  # локация: loc1_2 - первая локация, вторая сцена
     loc1_3 = Location('loc1_3.jpg', 'loc1_3.mp3', ["Дом сторожа маяка", "Вариант 2"])
@@ -125,6 +149,7 @@ if __name__ == '__main__':
     loc4_1 = Location('loc4_1.jpg', 'loc4_1.mp3', ["Призрак старого хозяина маяка", "Вариант 2"])       # локация: loc4_1 - четвертая локация, первая сцена
     loc4_2 = Location('loc4_2.jpg', 'loc4_2.mp3', ["Вариант 1", "Вариант 2"])
 
+    loc01.next_locations = [loc1_1,loc1_3]
     loc1_1.next_locations = [loc1_2, loc1_3] # Выбор варианта следующей локации: либо loc1_2, либо loc1_3
     loc1_2.next_locations = [loc2_1, loc1_1] # Поскольку еще нет ветвления сюжета, при выборе второго варианта
     loc1_3.next_locations = [loc2_1, loc1_1] # во всех локациях кроме первой записан переход на loc1_1
@@ -132,6 +157,11 @@ if __name__ == '__main__':
     loc3_1.next_locations = [loc4_1, loc1_1]
     loc4_1.next_locations = [loc4_2, loc1_1]
     loc4_2.next_locations = [loc1_1, loc1_1]
+
+    loc01.dialog = [("Диктор", "Диктор: Молодой журналист Кирилл приезжает в небольшой прибрежный городок, "
+                               "чтобы написать статью о старом маяке, окруженном мрачными легендами и тайнами. "
+                               "По прибытии, Кирилл узнает о недавнем исчезновении местного сторожа маяка "
+                               "и решает начать собственное расследование.")]
 
     loc1_1.dialog = [("Кирилл", "Здравствуйте, я Кирилл, новенький здесь."),         # диалоги: loc1_1.dialog - диалог первой локации первой сцены
                      ("Бармен", "Приветствую, Кирилл! Что вам налить?"),
@@ -170,20 +200,23 @@ if __name__ == '__main__':
                      ("Персонаж 1", "Текст к локации."),
                      ("Персонаж 2", "Текст к локации.")]
 
-    loc1_1.load_voice_clip(0, 'Location1_dialogs/loc1_1_01.mp3')
-    loc1_1.load_voice_clip(1, 'Location1_dialogs/loc1_1_02.mp3')
-    loc1_1.load_voice_clip(2, 'Location1_dialogs/loc1_1_03.mp3')
-    loc1_1.load_voice_clip(3, 'Location1_dialogs/loc1_1_04.mp3')
-    loc1_1.load_voice_clip(4, 'Location1_dialogs/loc1_1_05.mp3')
-    loc1_1.load_voice_clip(5, 'Location1_dialogs/loc1_1_06.mp3')
-    loc1_1.load_voice_clip(6, 'Location1_dialogs/loc1_1_07.mp3')
-    loc1_1.load_voice_clip(7, 'Location1_dialogs/loc1_1_08.mp3')
-    loc1_1.load_voice_clip(8, 'Location1_dialogs/loc1_1_09.mp3')
-    loc1_1.load_voice_clip(9, 'Location1_dialogs/loc1_1_10.mp3')
+    loc01.load_voice_clip(0, 'Location01_Prolog/Prolog.mp3')
 
+    loc1_1.load_voice_clip(0, 'Location1_dialogs/loc1_1_01.mp3')
+    loc1_1.load_voice_clip(1, 'Location1_dialogs/loc1_1_02b.mp3')
+    loc1_1.load_voice_clip(2, 'Location1_dialogs/loc1_1_03.mp3')
+    loc1_1.load_voice_clip(3, 'Location1_dialogs/loc1_1_04b.mp3')
+    loc1_1.load_voice_clip(4, 'Location1_dialogs/loc1_1_05.mp3')
+    loc1_1.load_voice_clip(5, 'Location1_dialogs/loc1_1_06b.mp3')
+    loc1_1.load_voice_clip(6, 'Location1_dialogs/loc1_1_07b.mp3')
+    loc1_1.load_voice_clip(7, 'Location1_dialogs/loc1_1_08b.mp3')
+    loc1_1.load_voice_clip(8, 'Location1_dialogs/loc1_1_09.mp3')
+    loc1_1.load_voice_clip(9, 'Location1_dialogs/loc1_1_10b.mp3')
+
+    loc01.character_images['Диктор'] = pygame.image.load('Location01_Prolog/loc01_Pab.jpg')
     loc1_1.character_images['Кирилл'] = pygame.image.load('Location1_dialogs/Kirill.jpeg')
     loc1_1.character_images['Бармен'] = pygame.image.load('Location1_dialogs/Barmen.jpeg')
 
 
 
-    loc1_1.run()  # запуск первой локации, первой сцены
+    loc01.run()  # запуск первой локации, первой сцены
