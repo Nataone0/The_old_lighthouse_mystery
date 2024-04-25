@@ -79,8 +79,9 @@ class Location:    # класс локации, все атрибуты можн
         pygame.mixer.music.load(self.music_path)
         pygame.mixer.music.play(-1,0.0)                   # бесконечное воспроизведение звука
 
-    def draw_text(self, text, position):
-        text_surface = self.font.render(text, True, (255, 255, 255))  # Белый цвет текста
+    def draw_text(self, text, position, font_size=24):  # Значение по умолчанию для размера шрифта
+        font = pygame.font.Font(None, font_size)  # Создаем шрифт заданного размера
+        text_surface = font.render(text, True, (255, 255, 255))  # Белый цвет текста
         self.screen.blit(text_surface, position)
 
     def choose_action(self):  # выбор перехода к следующей локации
