@@ -6,6 +6,88 @@ import os
 SCREEN_WIDTH = 1024  # размеры окна выбрал такими, потому что картинки 1024 х 512,
 SCREEN_HEIGHT = 512  # можно обрезать картинки (или заново сгенерить) если нужен другой размер
 
+class Menu:
+    def __init__(self, screen):
+        self.screen = screen
+        self.font = pygame.font.Font(None, 24)
+        self.menu_items = ["Продолжить игру", "Сохранить игру", "Загрузить игру", "Настройки", "Выход"]
+        self.selected_item = 0
+        self.active = False
+
+    def draw_menu(self):
+        dark_overlay = pygame.Surface(self.screen.get_size())
+        dark_overlay.set_alpha(200)
+        dark_overlay.fill((0, 0, 0))
+        self.screen.blit(dark_overlay, (0, 0))
+
+        blur_surface = pygame.transform.scale(self.screen, (SCREEN_WIDTH // 10, SCREEN_HEIGHT // 10))
+        blur_surface = pygame.transform.scale(blur_surface, (SCREEN_WIDTH, SCREEN_HEIGHT))
+        self.screen.blit(blur_surface, (0, 0))
+
+        for i, item in enumerate(self.menu_items):
+            color = (255, 255, 255) if i == self.selected_item else (150, 150, 150)
+            text = self.font.render(item, True, color)
+            text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + i * 30))
+            self.screen.blit(text, text_rect)
+
+    def move_selection(self, direction):
+        self.selected_item = (self.selected_item + direction) % len(self.menu_items)
+
+    def toggle_menu(self):
+        self.active = not self.active
+        if self.active:
+            self.selected_item = 0
+
+    def run_menu(self):
+        while self.active:
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == KEYDOWN:
+                    if event.key == K_UP:
+                        self.move_selection(-1)
+                    elif event.key == K_DOWN:
+                        self.move_selection(1)
+                    elif event.key == K_RETURN:
+                        if self.selected_item == 0:
+                            self.toggle_menu()
+                        elif self.selected_item == 1:
+                            self.toggle_menu()
+                        elif self.selected_item == 2:
+                            self.toggle_menu()
+                        elif self.selected_item == 3:
+                            self.toggle_menu()
+                        elif self.selected_item == 4:
+                            self.toggle_menu()
+
+
+
+
+class Notebook:
+    def __init__(self, screen):
+        self.screen = screen  # Экран для отображения записной книжки
+        self.active = False  # Флаг активации записной книжки
+        self.notebook_data = []  # Данные для отображения в таблице SQL
+
+    def open_notebook(self):
+        self.active = True
+        # Реализация открытия и отображения записной книжки (можно использовать SQL-запросы для отображения данных)
+
+    def close_notebook(self):
+        self.active = False
+        # Реализация закрытия записной книжки и возвращения к игре
+
+    def display_notebook(self):
+        # Реализация отображения таблицы SQL с подсказками и артефактами
+        if self.notebook_data:
+            for row in self.notebook_data:
+                self.screen.blit(row[0], row[1])
+        else:
+            self.screen.blit(self.font.render("Записная книжка пуста", True, (255, 255, 255)), (10, 10))
+
+
+
 class Location:    # класс локации, все атрибуты можно хранить и загружать из SQLite
     def __init__(self, background_image_path, music_path, options=None):
         pygame.init()
@@ -56,7 +138,7 @@ class Location:    # класс локации, все атрибуты можн
                             index += 1
                         else:
                             running = False  # выход из диалога
-                    elif event.key == K_ESCAPE:
+                    elif event.key == K_BACKSPACE:
                         pygame.quit()
                         sys.exit()
 
@@ -138,6 +220,8 @@ class Location:    # класс локации, все атрибуты можн
         else:
             pygame.quit()
 
+
+
 if __name__ == '__main__':
     loc01 = Location('Location01_Prolog/loc01_Pab.jpg', 'Location01_Prolog/plesk-voln.mp3', ["Посетить местный паб", "Вариант 2"])
 
@@ -216,6 +300,7 @@ if __name__ == '__main__':
     loc01.character_images['Диктор'] = pygame.image.load('Location01_Prolog/loc01_Pab.jpg')
     loc1_1.character_images['Кирилл'] = pygame.image.load('Location1_dialogs/Kirill.jpeg')
     loc1_1.character_images['Бармен'] = pygame.image.load('Location1_dialogs/Barmen.jpeg')
+
 
 
 
