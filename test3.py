@@ -10,7 +10,7 @@ class Menu:
     def __init__(self, screen):
         self.screen = screen
         self.font = pygame.font.Font(None, 24)
-        self.menu_items = ["Продолжить игру", "Сохранить игру", "Загрузить игру", "Настройки", "Выход"]
+        self.menu_items = ["Продолжить игру", "Начать новую игру", "Сохранить игру", "Загрузить игру", "Настройки", "Выход"]
         self.selected_item = 0
         self.active = False
 
@@ -50,18 +50,32 @@ class Menu:
                     elif event.key == K_DOWN:
                         self.move_selection(1)
                     elif event.key == K_RETURN:
-                        if self.selected_item == 0:
+                        if self.selected_item == 0: # выбор "Продолжить игру"
+                            self.active = False
+                        elif self.selected_item == 1: # выбор "Начать новую игру"
+                            # Логика для начала новой игры (очистка базы данных и переход к первой локации)
+                            self.clear_game_data()
+                            self.active = False
+                        elif self.selected_item == 2: # выбор "Сохранить игру"
+                            # Логика для сохранения игры
+                            self.save_game()
+                            self.active = False
+                        elif self.selected_item == 3: # выбор "Загрузить игру"
                             self.toggle_menu()
-                        elif self.selected_item == 1:
-                            self.toggle_menu()
-                        elif self.selected_item == 2:
-                            self.toggle_menu()
-                        elif self.selected_item == 3:
-                            self.toggle_menu()
-                        elif self.selected_item == 4:
-                            self.toggle_menu()
+                        elif self.selected_item == 4: # выбор "Настройки"
+                            # Логика для открытия меню настроек
+                            # (необходимо реализовать отдельный класс для меню настроек)
+                            pass
+                        elif self.selected_item == 5: # выбор "Выход"
+                            pygame.quit()
 
+    def clear_game_data(self):
+        # Логика для очистки базы данных (начало новой игры)
+        pass
 
+    def save_game(self):
+        # Логика для сохранения игры
+        pass
 
 
 class Notebook:
@@ -210,6 +224,7 @@ class Location:    # класс локации, все атрибуты можн
         return opt
 
     def run(self):  # запуск всех методов локации
+
         self.start_music()
         self.run_dialog()
         opt = self.choose_action()
