@@ -59,9 +59,9 @@ class Menu:
             sys.exit()
         elif self.selected_item == 0:  # Новая игра
             loc01.run()  # перехода к игре, к локации loc01
-        elif self.selected_item == 2:  # Сохранить игру
-            self.save_game()
         elif self.selected_item == 1:  # Продолжить игру
+            self.save_game()  # Перед переходом в меню нужно сохранить игру, затем загрузить ее
+        elif self.selected_item == 2:  # Сохранить игру
             self.load_game() # Перед переходом в меню нужно сохранить игру, затем загрузить ее
         elif self.selected_item == 3:  # Загрузить игру
             self.load_game()
@@ -189,7 +189,9 @@ class Location:    # класс локации, все атрибуты можн
                     pygame.quit()  # выход из игры
                     sys.exit()
                 elif event.type == KEYDOWN:
-                    if event.key == K_SPACE:  # листаем фразы диалога клавишей Пробела
+                    if event.key == K_ESCAPE:
+                        main()
+                    elif event.key == K_SPACE:  # листаем фразы диалога клавишей Пробела
                         if index < len(self.dialog) - 1:
                             index += 1
                         else:
@@ -197,7 +199,6 @@ class Location:    # класс локации, все атрибуты можн
                     elif event.key == K_BACKSPACE:
                         pygame.quit()
                         sys.exit()
-
             self.screen.blit(self.background, (0, 0))
             speaker, text = self.dialog[index]
             if speaker in self.character_images:
@@ -226,11 +227,11 @@ class Location:    # класс локации, все атрибуты можн
         current_width = 0
 
         for word in words:
-            word_surface = font.render(word, True, (255, 255, 255))
+            word_surface = font.render(word, True, (250, 200, 250))
             word_width, word_height = word_surface.get_size()
             if max_width is not None and current_width + word_width >= max_width:
                 # Если добавление слова превышает максимальную ширину, выводим текущую строку
-                line_surface = font.render(' '.join(current_line), True, (255, 255, 255))
+                line_surface = font.render(' '.join(current_line), True, (250, 200, 250))
                 self.screen.blit(line_surface, (x, y))
                 y += word_height  # Перемещаемся на следующую строку
                 current_line = [word]  # Начинаем новую строку с текущего слова
@@ -241,7 +242,7 @@ class Location:    # класс локации, все атрибуты можн
                 current_width += word_width + space
 
         # Вывод последней строки
-        line_surface = font.render(' '.join(current_line), True, (255, 255, 255))
+        line_surface = font.render(' '.join(current_line), True, (250, 200, 250))
         self.screen.blit(line_surface, (x, y))
 
     def choose_action(self):  # выбор перехода к следующей локации
@@ -252,21 +253,24 @@ class Location:    # класс локации, все атрибуты можн
                     pygame.quit()
                     sys.exit()
                 elif event.type == KEYDOWN:
-                    if event.key == K_1 and len(self.options) >= 1:    # выбор из двух вариантов
+                    if event.key == K_ESCAPE:    # вызов меню
+                        main()
+                    elif event.key == K_1 and len(self.options) >= 1:    # выбор из двух вариантов
                         opt = 0                                        # можно сделать больше при большом желании,
                     elif event.key == K_2 and len(self.options) >= 2:  # но я думаю нам двух достаточно
                         opt = 1
+                    elif event.key == K_3 and len(self.options) >= 3:
+                        opt = 2
                     if opt is not None:                                # когда выбор сделан, opt is not None, - остановка воспроизведения звука
                         pygame.mixer.music.stop()
             self.screen.blit(self.background, (0, 0))
             for i, option in enumerate(self.options):
-                self.draw_text(f"{i + 1}. {option}", (100, 50 + 30 * i), font_size=22) # вывод надписей для выбора следующей локации
+                self.draw_text(f"{i + 1}. {option}", (100, 400 + 25 * i), font_size=24) # вывод надписей для выбора следующей локации
             pygame.display.update()
             self.clock.tick(60)
         return opt
 
     def run(self):  # запуск всех методов локации
-
         self.start_music()
         self.run_dialog()
         opt = self.choose_action()
@@ -280,32 +284,55 @@ class Location:    # класс локации, все атрибуты можн
 
 
 if __name__ == '__main__':
-    loc01 = Location('Location01_Prolog/loc01_Pab.jpg', 'Location01_Prolog/plesk-voln.mp3', ["Посетить местный паб", "Вариант 2"])
+    loc01 = Location('Location01_Prolog/loc01_Pab.jpg', 'Location01_Prolog/plesk-voln.mp3',
+                    ["Расспросить бармена местного паба", "Расспросить посетителей местного паба"])
 
-    loc1_1 = Location('loc1_1.jpg', 'loc1_1.mp3', ["Изучить записку", "Расспросить посетителей бара"]) # создание локаций: loc1 - первая локация, _1 - первая сцена
-    loc1_2 = Location('loc1_2.jpg', 'loc1_2.mp3', ["Дом сторожа маяка", "Вариант 2"])                  # локация: loc1_2 - первая локация, вторая сцена
-    loc1_3 = Location('loc1_3.jpg', 'loc1_3.mp3', ["Дом сторожа маяка", "Вариант 2"])
-    loc2_1 = Location('loc2_1.jpg', 'loc2_1.mp3', ["Прибрежный лес", "Вариант 2"])
-    loc3_1 = Location('loc3_1.jpg', 'loc3_1.mp3', ["Старый маяк", "Вариант 2"])
-    loc4_1 = Location('loc4_1.jpg', 'loc4_1.mp3', ["Призрак старого хозяина маяка", "Вариант 2"])       # локация: loc4_1 - четвертая локация, первая сцена
-    loc4_2 = Location('loc4_2.jpg', 'loc4_2.mp3', ["Вариант 1", "Вариант 2"])
+    loc1_1 = Location('loc1_1.jpg', 'loc1_1.mp3', ["Изучить записку",
+                    "Расспросить посетителей бара"]) # создание локаций: loc1 - первая локация, _1 - первая сцена
+    loc1_2 = Location('loc1_2.jpg', 'loc1_2.mp3', ["Дом сторожа маяка",
+                    "Расспросить посетителей бара"])                  # локация: loc1_2 - первая локация, вторая сцена
+    loc1_3 = Location('loc1_3.jpg', 'loc1_3.mp3', ["Дом сторожа маяка",
+                    "Изучить записку", "Расспросить бармена"])
+    loc2_1 = Location('loc2_1.jpg', 'loc2_1.mp3', ["Встреча в прибрежном лесу",
+                    "Разорванное письмо"]) # Соседка сторожа
+    loc2_2 = Location('loc2_2.jpg', 'loc2_2.mp3', ["Встреча в прибрежном лесу",
+                    "Вернуться в бар, изучить записку"]) # разорванное письмо
+    loc3_1 = Location('loc3_1.jpg', 'loc3_1.mp3', ["Старый маяк",
+                    "Искать странный компас"]) # Встреча со старым рыбаком в прибрежном лесу
+    loc3_2 = Location('loc3_2.jpg', 'loc3_2.mp3', ["Старый маяк",
+                    "Вернуться в дом сторожа, изучить разорванное письмо"])  # Странный компас
+    loc4_1 = Location('loc4_1.jpg', 'loc4_1.mp3', ["Призрак старого хозяина маяка",
+                    "Найти компас"])  # Старый маяк
+    loc4_2 = Location('loc4_2.jpg', 'loc4_2.mp3', ["Тайна маяка",
+                    "Уйти, не злить призрака"]) # Призрак старого маяка
+    loc4_3 = Location('loc4_3.jpg', 'loc4_3.mp3', ["Домой"])
+                    # Тайна маяка. Логотопы Зерокодера
+    loc5_1 = Location('log5_1.jpg', 'loc5_1.mp3', ["Игра окончена"])
+                    # Уплывает. Тайна раскрыта
+    loc5_2 = Location('log5_1.jpg', 'loc5_1.mp3', ["Игра окончена"])
+                    # Уплывает, но вернется, чтобы раскрыть Тайну
 
     loc01.next_locations = [loc1_1,loc1_3]
     loc1_1.next_locations = [loc1_2, loc1_3] # Выбор варианта следующей локации: либо loc1_2, либо loc1_3
-    loc1_2.next_locations = [loc2_1, loc1_1] # Поскольку еще нет ветвления сюжета, при выборе второго варианта
-    loc1_3.next_locations = [loc2_1, loc1_1] # во всех локациях кроме первой записан переход на loc1_1
-    loc2_1.next_locations = [loc3_1, loc1_1]
-    loc3_1.next_locations = [loc4_1, loc1_1]
-    loc4_1.next_locations = [loc4_2, loc1_1]
-    loc4_2.next_locations = [loc1_1, loc1_1]
+    loc1_2.next_locations = [loc2_1, loc1_3]
+    loc1_3.next_locations = [loc2_1, loc1_2, loc1_1]
+    loc2_1.next_locations = [loc3_1, loc2_2]
+    loc2_2.next_locations = [loc3_1, loc1_2]
+    loc3_1.next_locations = [loc4_1, loc3_2]
+    loc3_2.next_locations = [loc4_1, loc2_2]
+    loc4_1.next_locations = [loc4_2, loc3_2]
+    loc4_2.next_locations = [loc4_3, loc5_2]
+    loc4_3.next_locations = [loc5_1]
+    loc5_1.next_locations = []
+    loc5_2.next_locations = []
 
     loc01.dialog = [("Автор", " Молодой журналист Кирилл приезжает в небольшой прибрежный городок, "
-                               "чтобы написать статью о старом маяке, окруженном мрачными легендами и тайнами. "
-                               "По прибытии, Кирилл узнает о недавнем исчезновении местного сторожа маяка "
-                               "и решает начать собственное расследование.")]
+                    "чтобы написать статью о старом маяке, окруженном мрачными легендами и тайнами. "
+                    "По прибытии, Кирилл узнает о недавнем исчезновении местного сторожа маяка "
+                    "и решает начать собственное расследование.")]
 
-    loc1_1.dialog = [("Кирилл", "Здравствуйте, я Кирилл, новенький здесь."),         # диалоги: loc1_1.dialog - диалог первой локации первой сцены
-                     ("Бармен", "Приветствую, Кирилл! Что вам налить?"),
+    loc1_1.dialog = [("Кирилл", "Здравствуйте, я Кирилл, новенький здесь."), # диалоги: loc1_1.dialog -
+                     ("Бармен", "Приветствую, Кирилл! Что вам налить?"),     # диалог первой локации первой сцены
                      ("Кирилл",
                       "Кофе, пожалуйста! Я слышал, что вы можете рассказать много интересного о старом маяке."),
                      ("Бармен", "Да, маяк... Он уже много лет беспокоит умы местных."),
@@ -324,14 +351,21 @@ if __name__ == '__main__':
                      ("Персонаж 2", "Текст к локации."),
                      ("Персонаж 1", "Текст к локации."),
                      ("Персонаж 2", "Текст к локации.")]
-    loc2_1.dialog = [("Персонаж 1", "Текст к локации: Дом сторожа маяка."),         # диалог loc2_1.dialog - диалог второй локации первой сцены
+    loc2_1.dialog = [("Персонаж 1", "Текст к локации: Дом сторожа маяка."), # диалог  второй локации первой сцены
                      ("Персонаж 2", "Текст к локации."),
                      ("Персонаж 1", "Текст к локации."),
                      ("Персонаж 2", "Текст к локации.")]
+    loc2_2.dialog = [("Кирилл", "Текст к локации: Разорванное писмо."),
+                     ("Кирилл", "Текст к локации."), # здесь можно поместить мысли Кирилла или его монолог
+                     ("Кирилл", "Текст к локации.")]
     loc3_1.dialog = [("Персонаж 1", "Текст к локации: Прибрежный лес."),
                      ("Персонаж 2", "Текст к локации."),
                      ("Персонаж 1", "Текст к локации."),
                      ("Персонаж 2", "Текст к локации.")]
+    loc3_2.dialog = [("Кирилл", "Текст к локации: Странный компас."),
+                     ("Кирилл", "Текст к локации."), # здесь тоже можно поместить мысли Кирилла или его монолог
+                     ("Кирилл", "Текст к локации."),
+                     ("Кирилл", "Текст к локации.")]
     loc4_1.dialog = [("Персонаж 1", "Текст к локации: Старый маяк."),
                      ("Персонаж 2", "Текст к локации."),
                      ("Персонаж 1", "Текст к локации."),
@@ -340,6 +374,14 @@ if __name__ == '__main__':
                      ("Персонаж 2", "Текст к локации."),
                      ("Персонаж 1", "Текст к локации."),
                      ("Персонаж 2", "Текст к локации.")]
+    loc4_3.dialog = [("Кирилл", "Текст к локации: Здесь он догадывается о значении нуля."),
+                     ("Кирилл", "ЗТекст к локации."), # здесь тоже можно поместить мысли Кирилла или его монолог
+                     ("Кирилл", "Текст к локации."),
+                     ("Кирилл", "Текст к локации.")]
+    loc5_1.dialog = [("Кирилл", "Я уплывал. Какая-то светлая грусть прокралась в мое сердце."), # мысли Кирилла
+                     ("Кирилл", "Тайна старого маяка раскрыта, но поверит ли мне читатель?.")]  # или его монолог
+    loc5_2.dialog = [("Кирилл", "Я уплывал, мысли о маяке терзали мое сердце."),  # мысли Кирилла
+                     ("Кирилл", "Я вернусь сюда, я обязательно вернусь и докопаюсь до истины.")]  # или его монолог
 
     loc01.load_voice_clip(0, 'Location01_Prolog/Prolog.mp3')
 
@@ -354,8 +396,9 @@ if __name__ == '__main__':
     loc1_1.load_voice_clip(8, 'Location1_dialogs/loc1_1_09.mp3')
     loc1_1.load_voice_clip(9, 'Location1_dialogs/loc1_1_10b.mp3')
 
-    loc01.character_images['Диктор'] = pygame.image.load('Location01_Prolog/loc01_Pab.jpg')
+    loc01.character_images['Автор'] = pygame.image.load('Location01_Prolog/loc01_Pab.jpg')
     loc1_1.character_images['Кирилл'] = pygame.image.load('Location1_dialogs/Kirill.jpeg')
     loc1_1.character_images['Бармен'] = pygame.image.load('Location1_dialogs/Barmen.jpeg')
 
     main()
+
