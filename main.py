@@ -384,7 +384,7 @@ if __name__ == '__main__':
                      ("Final_Artefact", "Это же QR-код. Но куда он меня приведёт?"),
                      ("Courses", "Вот же истину твердили древние цивилизации: сокровище - это не золото и брильянты, а знания!")]
     loc5_1.dialog = [("Кирилл", "Я уплывал. Какая-то светлая грусть прокралась в мое сердце."), # мысли Кирилла
-                     ("Кирилл", "Тайна старого маяка раскрыта, но поверит ли мне читатель?.")]  # или его монолог
+                     ("Кирилл", "Тайна старого маяка раскрыта, но поверит ли мне читатель?")]  # или его монолог
     loc5_2.dialog = [("Кирилл", "Я уплывал, мысли о маяке терзали мое сердце."),  # мысли Кирилла
                      ("Кирилл", "Я вернусь сюда, я обязательно вернусь и докопаюсь до истины.")]  # или его монолог
 
@@ -426,6 +426,11 @@ if __name__ == '__main__':
     loc4_3.load_voice_clip(2, 'loc4_dialogs/loc4_3_03_Kirill.mp3')
     loc4_3.load_voice_clip(3, 'loc4_dialogs/loc4_3_04_Kirill.mp3')
     loc4_3.load_voice_clip(4, 'loc4_dialogs/loc4_3_05_Kirill.mp3')
+
+    loc5_1.load_voice_clip(0, 'Loc5_Return_Home/loc5_1_01_Kirill.mp3')
+    loc5_1.load_voice_clip(1, 'Loc5_Return_Home/loc5_1_02_Kirill.mp3')
+    loc5_2.load_voice_clip(0, 'Loc5_Return_Home/loc5_2_01_Kirill.mp3')
+    loc5_2.load_voice_clip(1, 'Loc5_Return_Home/loc5_2_02_Kirill.mp3')
 
     loc01.character_images['Автор'] = pygame.image.load('Loc01_Prolog/loc01_Pab.jpg')
     loc1_1.character_images['Кирилл'] = pygame.image.load('Loc1_dialogs/Kirill.jpeg')
