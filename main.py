@@ -420,6 +420,20 @@ if __name__ == '__main__':
     loc2_1.load_voice_clip(5, 'Loc2_dialogs/loc2_1_06_Sosedka.mp3')
 
     loc2_2.load_voice_clip(0, 'Loc2_2_Pismo/Pismo.mp3')
+    loc2_2.load_voice_clip(1, 'Loc2_2_Pismo/loc2_2_01_Kirill.mp3')
+    loc2_2.load_voice_clip(2, 'Loc2_2_Pismo/loc2_2_02_Kirill.mp3')
+
+    loc3_1.load_voice_clip(0, 'Loc3_dialogs/loc3_1_01_Kirill.mp3')
+    loc3_1.load_voice_clip(1, 'loc3_dialogs/loc3_1_02_Fisher.mp3')
+    loc3_1.load_voice_clip(2, 'loc3_dialogs/loc3_1_03_Kirill.mp3')
+    loc3_1.load_voice_clip(3, 'loc3_dialogs/loc3_1_04_Fisher.mp3')
+
+    loc3_2.load_voice_clip(0, 'loc3_dialogs/loc3_2_01_Kirill.mp3')
+    loc3_2.load_voice_clip(1, 'loc3_dialogs/loc3_2_02_Kirill.mp3')
+    loc3_2.load_voice_clip(2, 'loc3_dialogs/loc3_2_03_Kirill.mp3')
+    loc3_2.load_voice_clip(3, 'loc3_dialogs/loc3_2_04_Kirill.mp3')
+
+
 
     loc4_3.load_voice_clip(0, 'loc4_dialogs/loc4_3_01_Kirill.mp3')
     loc4_3.load_voice_clip(1, 'loc4_dialogs/loc4_3_02_Kirill.mp3')
