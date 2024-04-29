@@ -352,7 +352,7 @@ if __name__ == '__main__':
                      ("Кирилл", "Слышал вы можете помочь с подсказкой для разгадки тайн маяка."),
                      ("Посетитель бара", "Всё что я могу - это указать тебе направление, а дальше ты уже сам разберёшься."),
                      ("Посетитель бара", "Найди соседку сторожа, она точно знает то, что не знаем мы.")]
-    loc2_1.dialog = [("Кирилл", "Бог в помощь, мадам! Я слышал, что вы можете рассказать много интересного о стороже старого маяка"), # диалог  второй локации первой сцены
+    loc2_1.dialog = [("Кирилл", "Бог в помощь, мадам! Я слышал, что вы можете рассказать много интересного про сторожа старого маяка"), # диалог  второй локации первой сцены
                      ("Соседка сторожа", "Конечно, голубчик. Что тебя интересует?"),
                      ("Кирилл", "Почему все вокруг боятся этого маяка и его сторожа?"),
                      ("Соседка сторожа", "Люди всегда боятся того, что не знают или не могут понять."),
@@ -365,7 +365,7 @@ if __name__ == '__main__':
                      ("Рыбак", "Маяк - место страшное, но помогает он и тем, кто верит. Помни: многие видели Призрака, но мало кто смог разгадать его загадку."),
                      ("Кирилл", "Спасибо за совет. Можете ли вы дать какую-то подсказку, помогающую разгадать тайны местности?"),
                      ("Рыбак", "Запомни: ключ к разгадке таится в словах, которые не сказаны вслух, но слышны в сердце каждого.")]
-    loc3_2.dialog = [("Кирилл", "Странный старик. Говорит фразами как мастер Йода из Звёздных войн"),
+    loc3_2.dialog = [("Кирилл", "Странный старик. Говорит фразами как магистр Йода из Звёздных войн"),
                      ("Кирилл", "Итак, что мы имеем?. Записка детектива, разорванное письмо и компас"), # здесь тоже можно поместить мысли Кирилла или его монолог
                      ("Кирилл", "А что это тут у нас на обратной стороне написано? Две тысячи двадцать четыре."),
                      ("Кирилл", "Это явно какой-то шифр... или код...")]
@@ -389,27 +389,34 @@ if __name__ == '__main__':
 
     loc01.load_voice_clip(0, 'Location01_Prolog/Prolog.mp3')
 
-    loc1_1.load_voice_clip(0, 'Location1_dialogs/loc1_1_01.mp3')
-    loc1_1.load_voice_clip(1, 'Location1_dialogs/loc1_1_02b.mp3')
-    loc1_1.load_voice_clip(2, 'Location1_dialogs/loc1_1_03.mp3')
-    loc1_1.load_voice_clip(3, 'Location1_dialogs/loc1_1_04b.mp3')
-    loc1_1.load_voice_clip(4, 'Location1_dialogs/loc1_1_05.mp3')
-    loc1_1.load_voice_clip(5, 'Location1_dialogs/loc1_1_06b.mp3')
-    loc1_1.load_voice_clip(6, 'Location1_dialogs/loc1_1_07b.mp3')
-    loc1_1.load_voice_clip(7, 'Location1_dialogs/loc1_1_08b.mp3')
-    loc1_1.load_voice_clip(8, 'Location1_dialogs/loc1_1_09.mp3')
-    loc1_1.load_voice_clip(9, 'Location1_dialogs/loc1_1_10b.mp3')
+    loc1_1.load_voice_clip(0, 'Loc1_dialogs/loc1_1_01.mp3')
+    loc1_1.load_voice_clip(1, 'Loc1_dialogs/loc1_1_02b.mp3')
+    loc1_1.load_voice_clip(2, 'Loc1_dialogs/loc1_1_03.mp3')
+    loc1_1.load_voice_clip(3, 'Loc1_dialogs/loc1_1_04b.mp3')
+    loc1_1.load_voice_clip(4, 'Loc1_dialogs/loc1_1_05.mp3')
+    loc1_1.load_voice_clip(5, 'Loc1_dialogs/loc1_1_06b.mp3')
+    loc1_1.load_voice_clip(6, 'Loc1_dialogs/loc1_1_07b.mp3')
+    loc1_1.load_voice_clip(7, 'Loc1_dialogs/loc1_1_08b.mp3')
+    loc1_1.load_voice_clip(8, 'Loc1_dialogs/loc1_1_09.mp3')
+    loc1_1.load_voice_clip(9, 'Loc1_dialogs/loc1_1_10b.mp3')
 
     loc1_2.load_voice_clip(0, 'Loc1_2_Zapiska/Zapiska.mp3')
     loc1_2.load_voice_clip(1, 'Loc1_2_Zapiska/loc1_2_01_Kirill.mp3')
     loc1_2.load_voice_clip(2, 'Loc1_2_Zapiska/loc1_2_02_Kirill.mp3')
     loc1_2.load_voice_clip(3, 'Loc1_2_Zapiska/loc1_2_03_Kirill.mp3')
 
-    loc1_3.load_voice_clip(0, 'Location1_dialogs/loc1_3_01_Kirill.mp3')
+    loc1_3.load_voice_clip(0, 'Loc1_dialogs/loc1_3_01_Kirill.mp3')
+    loc1_3.load_voice_clip(1, 'Loc1_dialogs/loc1_3_02_Posetitel.mp3')
+    loc1_3.load_voice_clip(2, 'Loc1_dialogs/loc1_3_03_Kirill.mp3')
+    loc1_3.load_voice_clip(3, 'Loc1_dialogs/loc1_3_04_Posetitel.mp3')
+    loc1_3.load_voice_clip(4, 'Loc1_dialogs/loc1_3_05_Posetitel.mp3')
 
-    loc1_3.load_voice_clip(2, 'Location1_dialogs/loc1_3_03_Kirill.mp3')
-
-
+    loc2_1.load_voice_clip(0, 'Loc2_dialogs/loc2_1_01_Kirill.mp3')
+    loc2_1.load_voice_clip(1, 'Loc2_dialogs/loc2_1_02_Sosedka.mp3')
+    loc2_1.load_voice_clip(2, 'Loc2_dialogs/loc2_1_03_Kirill.mp3')
+    loc2_1.load_voice_clip(3, 'Loc2_dialogs/loc2_1_04_Sosedka.mp3')
+    loc2_1.load_voice_clip(4, 'Loc2_dialogs/loc2_1_05_Kirill.mp3')
+    loc2_1.load_voice_clip(5, 'Loc2_dialogs/loc2_1_06_Sosedka.mp3')
 
     loc2_2.load_voice_clip(0, 'Loc2_2_Pismo/Pismo.mp3')
 
@@ -421,13 +428,13 @@ if __name__ == '__main__':
 
 
     loc01.character_images['Автор'] = pygame.image.load('Location01_Prolog/loc01_Pab.jpg')
-    loc1_1.character_images['Кирилл'] = pygame.image.load('Location1_dialogs/Kirill.jpeg')
-    loc1_1.character_images['Бармен'] = pygame.image.load('Location1_dialogs/Barmen.jpeg')
-    loc1_3.character_images['Кирилл'] = pygame.image.load('Location1_dialogs/Kirill.jpeg')
+    loc1_1.character_images['Кирилл'] = pygame.image.load('Loc1_dialogs/Kirill.jpeg')
+    loc1_1.character_images['Бармен'] = pygame.image.load('Loc1_dialogs/Barmen.jpeg')
+    loc1_3.character_images['Кирилл'] = pygame.image.load('Loc1_dialogs/Kirill.jpeg')
     loc1_3.character_images['Посетитель бара'] = pygame.image.load('loc1_3.jpg')
-    loc2_1.character_images['Кирилл'] = pygame.image.load('Location1_dialogs/Kirill.jpeg')
+    loc2_1.character_images['Кирилл'] = pygame.image.load('Loc1_dialogs/Kirill.jpeg')
     loc2_1.character_images['Соседка сторожа'] = pygame.image.load('loc2_1.jpg')
-    loc3_1.character_images['Кирилл'] = pygame.image.load('Location1_dialogs/Kirill.jpeg')
+    loc3_1.character_images['Кирилл'] = pygame.image.load('Loc1_dialogs/Kirill.jpeg')
     loc3_1.character_images['Рыбак'] = pygame.image.load('loc3_1.jpg')
     loc4_2.character_images['Призрак'] = pygame.image.load('loc4_2.jpg')
 
