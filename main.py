@@ -284,8 +284,8 @@ class Location:    # класс локации, все атрибуты можн
 
 
 if __name__ == '__main__':
-    loc01 = Location('Location01_Prolog/loc01_Pab.jpg', 'Location01_Prolog/plesk-voln.mp3',
-                    ["Расспросить бармена местного паба", "Расспросить посетителей местного паба"])
+    loc01 = Location('Loc01_Prolog/loc01_Pab.jpg', 'Loc01_Prolog/plesk-voln.mp3',
+                     ["Расспросить бармена местного паба", "Расспросить посетителей местного паба"])
 
     loc1_1 = Location('loc1_1.jpg', 'loc1_1.mp3', ["Изучить записку",
                     "Расспросить посетителей бара"]) # создание локаций: loc1 - первая локация, _1 - первая сцена
@@ -305,7 +305,7 @@ if __name__ == '__main__':
                     "Найти компас"])  # Старый маяк
     loc4_2 = Location('loc4_2.jpg', 'loc4_2.mp3', ["Тайна маяка",
                     "Уйти, не злить призрака"]) # Призрак старого маяка
-    loc4_3 = Location('loc4_3.png', 'loc4_3.mp3', ["Домой"])
+    loc4_3 = Location('Loc4_3_Table/loc4_3.png', 'Loc4_3_Table/loc4_3.mp3', ["Домой"])
                     # Тайна маяка. Логотипы Зерокодера
     loc5_1 = Location('log5_1.jpg', 'loc5_1.mp3', ["Игра окончена"])
                     # Уплывает. Тайна раскрыта
@@ -378,16 +378,17 @@ if __name__ == '__main__':
                      ("Призрак", "Ты смел, ирод. Но что же ты готов отдать в обмен на правду?"),
                      ("Кирилл", "Все, что у меня есть - знание и любопытство."),
                      ("Призрак", "Знание ценно, но тебе нужно разгадать последнюю загадку. Разгадаешь - будешь жить долго и счастливо! Не разгадаешь - не сносить тебе головы!")]
-    loc4_3.dialog = [("Кирилл", "Как то всё на первый взгляд гладко прошло... я думал что будет битва."),
-                     ("Кирилл", "Что это там лежит на столе?"), # здесь тоже можно поместить мысли Кирилла или его монолог
-                     ("Кирилл", "Какие-то карточки... а на обратной стороне что?"),
-                     ("Кирилл", "Это же QR-код. Но куда он меня приведёт?")]
+    loc4_3.dialog = [("Table", "Как то всё на первый взгляд гладко прошло... я думал что будет битва."),
+                     ("Table_2", "Что это там лежит на столе?"), # здесь тоже можно поместить мысли Кирилла или его монолог
+                     ("QR-code", "Какие-то карточки... а на обратной стороне что?"),
+                     ("Final_Artefact", "Это же QR-код. Но куда он меня приведёт?"),
+                     ("Courses", "Вот же истину твердили древние цивилизации: сокровище - это не золото и брильянты, а знания!")]
     loc5_1.dialog = [("Кирилл", "Я уплывал. Какая-то светлая грусть прокралась в мое сердце."), # мысли Кирилла
                      ("Кирилл", "Тайна старого маяка раскрыта, но поверит ли мне читатель?.")]  # или его монолог
     loc5_2.dialog = [("Кирилл", "Я уплывал, мысли о маяке терзали мое сердце."),  # мысли Кирилла
                      ("Кирилл", "Я вернусь сюда, я обязательно вернусь и докопаюсь до истины.")]  # или его монолог
 
-    loc01.load_voice_clip(0, 'Location01_Prolog/Prolog.mp3')
+    loc01.load_voice_clip(0, 'Loc01_Prolog/Prolog.mp3')
 
     loc1_1.load_voice_clip(0, 'Loc1_dialogs/loc1_1_01.mp3')
     loc1_1.load_voice_clip(1, 'Loc1_dialogs/loc1_1_02b.mp3')
@@ -420,14 +421,13 @@ if __name__ == '__main__':
 
     loc2_2.load_voice_clip(0, 'Loc2_2_Pismo/Pismo.mp3')
 
+    loc4_3.load_voice_clip(0, 'loc4_dialogs/loc4_3_01_Kirill.mp3')
+    loc4_3.load_voice_clip(1, 'loc4_dialogs/loc4_3_02_Kirill.mp3')
+    loc4_3.load_voice_clip(2, 'loc4_dialogs/loc4_3_03_Kirill.mp3')
+    loc4_3.load_voice_clip(3, 'loc4_dialogs/loc4_3_04_Kirill.mp3')
+    loc4_3.load_voice_clip(4, 'loc4_dialogs/loc4_3_05_Kirill.mp3')
 
-
-
-
-
-
-
-    loc01.character_images['Автор'] = pygame.image.load('Location01_Prolog/loc01_Pab.jpg')
+    loc01.character_images['Автор'] = pygame.image.load('Loc01_Prolog/loc01_Pab.jpg')
     loc1_1.character_images['Кирилл'] = pygame.image.load('Loc1_dialogs/Kirill.jpeg')
     loc1_1.character_images['Бармен'] = pygame.image.load('Loc1_dialogs/Barmen.jpeg')
     loc1_3.character_images['Кирилл'] = pygame.image.load('Loc1_dialogs/Kirill.jpeg')
@@ -437,6 +437,13 @@ if __name__ == '__main__':
     loc3_1.character_images['Кирилл'] = pygame.image.load('Loc1_dialogs/Kirill.jpeg')
     loc3_1.character_images['Рыбак'] = pygame.image.load('loc3_1.jpg')
     loc4_2.character_images['Призрак'] = pygame.image.load('loc4_2.jpg')
+    loc4_2.character_images['Кирилл'] = pygame.image.load('Loc1_dialogs/Kirill.jpeg')
+    loc4_3.character_images['Table'] = pygame.image.load('Loc4_3_Table/loc4_3.jpg')
+    loc4_3.character_images['Table_2'] = pygame.image.load('Loc4_3_Table/loc4_3.png')
+    loc4_3.character_images['QR-code'] = pygame.image.load('Loc4_3_Table/qr-code_512x512.png')
+    loc4_3.character_images['Final_Artefact'] = pygame.image.load('Loc4_3_Table/Final_Artefact_1024x512.jpg')
+    loc4_3.character_images['Courses'] = pygame.image.load('Loc4_3_Table/Courses_1024x512.jpg')
+
 
 
     main()
